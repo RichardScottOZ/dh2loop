@@ -77,18 +77,7 @@ def test_config_creation():
 
 def test_clean_text():
     """Test text cleaning utility"""
-    from dh2l_llm import LithologyMatcher
-    
-    # Create a simple test instance without full initialization
-    class TextCleanerTest:
-        """Test wrapper for text cleaning without LLM initialization"""
-        def _clean_text(self, text: str) -> str:
-            import re
-            text = re.sub(r'[^\w\s]', ' ', text.lower())
-            text = re.sub(r'\s+', ' ', text).strip()
-            return text
-    
-    tester = TextCleanerTest()
+    from dh2l_llm import clean_lithology_text
     
     test_cases = [
         ("Granite (coarse)", "granite coarse"),
@@ -98,7 +87,7 @@ def test_clean_text():
     
     all_passed = True
     for input_text, expected in test_cases:
-        result = tester._clean_text(input_text)
+        result = clean_lithology_text(input_text)
         if result == expected:
             print(f"✓ Clean text: '{input_text}' -> '{result}'")
         else:

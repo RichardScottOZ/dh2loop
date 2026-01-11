@@ -9,9 +9,17 @@ Author: dh2loop contributors
 
 import os
 import json
+import logging
 from typing import List, Dict, Tuple, Optional, Any
 import re
 from enum import Enum
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Constants
+PERCENTAGE_MULTIPLIER = 100  # Convert 0-1 scores to percentages
 
 
 class LLMProvider(Enum):
@@ -177,21 +185,36 @@ class LithologyMatcher:
             best_match, score = self._parse_response(response_text)
             
             # Apply threshold
-            if score < threshold * 100:  # Convert to percentage
+            if score < threshold * PERCENTAGE_MULTIPLIER:
                 return "unclassified_rock", score
             
             return best_match, score
             
         except Exception as e:
-            print(f"Error during LLM matching: {e}")
+            logger.error(f"Error during LLM matching: {e}")
             return "unclassified_rock", 0.0
+
+
+def clean_lithology_text(text: str) -> str:
+    """
+    Clean and normalize lithology text.
+    
+    This is a utility function that can be used independently or by LithologyMatcher.
+    
+    Args:
+        text: Raw lithology text
+        
+    Returns:
+        Cleaned and normalized text
+    """
+    # Remove special characters and extra whitespace
+    text = re.sub(r'[^\w\s]', ' ', text.lower())
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
     
     def _clean_text(self, text: str) -> str:
-        """Clean and normalize text"""
-        # Remove special characters and extra whitespace
-        text = re.sub(r'[^\w\s]', ' ', text.lower())
-        text = re.sub(r'\s+', ' ', text).strip()
-        return text
+        """Clean and normalize text (delegates to utility function)"""
+        return clean_lithology_text(text)
     
     def _create_matching_prompt(self, company_litho: str, litho_dict: List[str]) -> str:
         """Create a prompt for lithology matching"""
@@ -323,7 +346,7 @@ def load_litho_dictionary(file_path: str) -> List[str]:
                 if row:
                     litho_terms.append(row[0].lower())
     except Exception as e:
-        print(f"Error loading dictionary: {e}")
+        logger.error(f"Error loading dictionary from {file_path}: {e}")
     
     return litho_terms
 
