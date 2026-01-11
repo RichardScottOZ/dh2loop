@@ -90,7 +90,12 @@ class LithologyMatcher:
         """Initialize the LangChain LLM based on provider"""
         try:
             from langchain_community.llms import Ollama
-            from langchain_community.chat_models import ChatOpenAI
+            
+            # Try newer import location first, fall back to older
+            try:
+                from langchain_openai import ChatOpenAI
+            except ImportError:
+                from langchain_community.chat_models import ChatOpenAI
             
             if self.provider == "bedrock":
                 from langchain_aws import ChatBedrock
