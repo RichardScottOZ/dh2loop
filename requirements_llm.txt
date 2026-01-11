@@ -1,0 +1,24 @@
+# LLM dependencies for dh2loop
+# Install with: pip install -r requirements_llm.txt
+
+# Core LangChain packages
+langchain>=0.1.0
+langchain-community>=0.0.20
+langchain-core>=0.1.0
+
+# AWS Bedrock support
+langchain-aws>=0.1.0
+boto3>=1.28.0
+
+# OpenAI API support (for OpenRouter and llama-server)
+langchain-openai>=0.0.5
+openai>=1.0.0
+
+# YAML config support
+pyyaml>=6.0
+
+# Optional: Progress bars for batch processing
+tqdm>=4.65.0
+
+# Note: Ollama doesn't require additional packages beyond langchain-community
+# For Ollama installation, see: https://ollama.ai/
