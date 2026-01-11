@@ -3,6 +3,18 @@
 
 ***dh2loop*** is a python library that provides the functionality to extract and standardize geologic drill hole data and export it into readily importable interval tables (collar, survey, lithology) to feed into 3D modelling packages. It addresses the subjective nature and variability of nomenclature of lithological descriptions within and across different drilling campaigns by integrating published dictionaries, glossaries and/or [thesauri](https://github.com/Loop3D/dh2loop/blob/master/thesauri.md) that were built to improve resolution of poorly defined or highly subjective use of terminology and idiosyncratic logging methods. It also classifies lithological data into multi-level groupings that can be used to systematically upscale and downscale drill hole data inputs in multiscale 3D geological model. It also provides drill hole desurveying (computes the geometry of a drillhole in three-dimensional space) and log correlation functions so that the results can be plotted in 3D and analysed against each other. The workflow behind the string matching is illustrated [here](images/fig07.png). 
 
+## 🆕 LLM-Based Lithology Matching
+
+In addition to traditional fuzzy string matching, dh2loop now supports **LLM-based lithology classification** using Large Language Models. This provides more intelligent, context-aware matching of lithological descriptions. 
+
+**Supported LLM Providers:**
+- 🏠 **Ollama** (local, free, private)
+- 🏠 **llama-server** (local llama.cpp)
+- ☁️ **AWS Bedrock** (Claude, Llama, etc.)
+- ☁️ **OpenRouter** (multiple LLMs via API)
+
+See [README_LLM.md](README_LLM.md) for detailed documentation and usage examples. 
+
 ![Upscaling Drillhole Data](images/drillholes2.png)
 *Upscaling Drillhole Data*
 
@@ -40,6 +52,30 @@ start->search->IDLE->open the file Lithology_With_Comments_IDLE.py -> run ->chec
 
 5. Try out the demo jupyter notebook:
 https://github.com/Loop3D/dh2loop/blob/master/notebooks/2_Exporting_and_Text_Parsing_of_Drillhole_Data_Demo.ipynb
+
+## Using LLM-based Lithology Matching
+
+For improved lithology classification using AI/LLMs:
+
+1. Install LLM dependencies: <br>
+`pip install -r requirements_llm.txt`
+
+2. Set up your preferred LLM provider (e.g., Ollama for local/free): <br>
+```bash
+# Install Ollama from https://ollama.ai/
+ollama pull llama2
+ollama serve
+```
+
+3. Try the LLM demo notebook: <br>
+`notebooks/LLM_Lithology_Matching_Demo.ipynb`
+
+4. Or use the command-line tool: <br>
+```bash
+python dh2loop/example_llm_usage.py --mode simple
+```
+
+See [README_LLM.md](README_LLM.md) for complete documentation.
 
 ## More information on the package
 Please refer to the [preprint](https://gmd.copernicus.org/preprints/gmd-2020-391/) currently under review.
